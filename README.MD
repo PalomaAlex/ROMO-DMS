@@ -1,19 +1,26 @@
 # romo-vite
 
-<div align="center" style="margin: 30px;">
-    <a href="https://refine.dev">
-    <img alt="refine logo" src="https://refine.ams3.cdn.digitaloceanspaces.com/readme/refine-readme-banner.png">
-    </a>
-</div>
-<br/>
+## volta 管理当前项目的node
 
-This [Refine](https://github.com/refinedev/refine) project was generated with [create refine-app](https://github.com/refinedev/refine/tree/master/packages/create-refine-app).
 
-## Getting Started
+## 添加资源 手脚架
+```bash
+pnpm run refine create-resource 资源包名称
+```
+该命令将会在 src/pages 下创建包含CRUD的资源文件并开放接口，同时在 App.tsx 中导入资源
 
-A React Framework for building internal tools, admin panels, dashboards & B2B apps with unmatched flexibility ✨
+其代码用到的组件，需要进行安装
+```bash
+npm install @refinedev/react-table @refinedev/react-hook-form 
+npm install @refinedev/inferencer
+```
 
-Refine's hooks and components simplifies the development process and eliminates the repetitive tasks by providing industry-standard solutions for crucial aspects of a project, including authentication, access control, routing, networking, state management, and i18n.
+## 导出官方资源 可以在官方资源基础上进行自定义
+```bash
+npm run refine swizzle
+```
+可以使用任意包管理器进行这个操作
+
 
 ## Available Scripts
 
@@ -21,6 +28,7 @@ Refine's hooks and components simplifies the development process and eliminates 
 
 ```bash
     pnpm dev
+    pnpm dev -- --host
 ```
 
 ### Building for production.
@@ -36,6 +44,8 @@ Refine's hooks and components simplifies the development process and eliminates 
 ```
 
 ## Learn More
+
+[ant 图标资源](https://ant.design/components/icon/)
 
 To learn more about **Refine**, please check out the [Documentation](https://refine.dev/docs)
 

@@ -1,41 +1,65 @@
+import { BrowserRouter, Route, Routes, Outlet, Navigate } from "react-router";
 import {
   Refine,
-  GitHubBanner,
-  WelcomePage,
   Authenticated,
 } from "@refinedev/core";
-import { DevtoolsPanel, DevtoolsProvider } from "@refinedev/devtools";
-import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
-
-import {
-  AuthPage,
-  ErrorComponent,
-  useNotificationProvider,
-  ThemedLayout,
-  ThemedSider,
-} from "@refinedev/antd";
-import "@refinedev/antd/dist/reset.css";
-
-import { dataProvider, liveProvider } from "@refinedev/supabase";
-import { App as AntdApp } from "antd";
-import { BrowserRouter, Route, Routes, Outlet } from "react-router";
 import routerProvider, {
   NavigateToResource,
   CatchAllNavigate,
   UnsavedChangesNotifier,
   DocumentTitleHandler,
 } from "@refinedev/react-router";
+import { DevtoolsPanel, DevtoolsProvider } from "@refinedev/devtools";
+import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
+
+import { dataProvider, liveProvider } from "@refinedev/supabase";
+
+import {
+  // AuthPage,
+  ErrorComponent,
+  useNotificationProvider,
+  // ThemedLayout,
+  // ThemedSider,
+  // ThemedTitle,
+} from "@refinedev/antd";
+import "@refinedev/antd/dist/reset.css";
+import { App as AntdApp, ConfigProvider } from "antd";
+import { GithubOutlined, AppstoreOutlined } from "@ant-design/icons";
+
 import { supabaseClient } from "./utility";
+import { AuthPage } from "./pages/auth";
+import authProvider from "./provider/authProvider";
+
 import { ColorModeContextProvider } from "./contexts/color-mode";
-import { Header } from "./components/header";
-import authProvider from "./authProvider";
+import { ThemedLayout,ThemedHeader,ThemedSider,ThemedTitle, } from "./components/layout";
+
+import { CountriesCreate, CountriesEdit, CountriesList, CountriesShow } from "./pages/countries";
+import { TUserDashboard } from "./pages/organization/t_user";
+import { TDeptDashboard } from "./pages/organization/t_dept";
+import { TRoleCreate, TRoleEdit, TRoleList, TRoleShow } from "./pages/organization/t_role";
+import { TPostCreate, TPostEdit, TPostList, TPostShow } from "./pages/organization/t_post";
 
 function App() {
   return (
     <BrowserRouter>
-      <GitHubBanner />
+      <div style={{ background: "#1677ff", color: "#fff", padding: "4px 16px", textAlign: "center" }}>
+        🚀 欢迎使用数据管理系统！
+      </div>
       <RefineKbarProvider>
         <ColorModeContextProvider>
+        {/* <ConfigProvider
+          theme={{
+            token: {
+              colorPrimary: "#3ecf8e",
+              colorText: "#80808a",
+              colorError: "#fa541c",
+              colorBgLayout: "#f0f2f5",
+              colorLink: "#3ecf8e",
+              colorLinkActive: "#3ecf8e",
+              colorLinkHover: "#3ecf8e",
+            },
+          }}
+        > */}
           <AntdApp>
             <DevtoolsProvider>
               <Refine
@@ -48,10 +72,162 @@ function App() {
                   syncWithLocation: true,
                   warnWhenUnsavedChanges: true,
                   projectId: "lbPq2D-6XcsGl-yka7Ae",
+                  title: {
+                    text: "数据管理系统",
+                    // icon: <AppstoreOutlined style={{ fontSize: 20 }} />,
+                    icon: <img src="/Volcano-logo.ico" alt="logo" style={{ width: "1.5em", }} />
+                  },
                 }}
+                resources={[{
+                  name: "organization",
+                  meta: {
+                    label: "组织管理",
+                  },
+                }, {
+                  name: "countries",
+                  list: "/countries",
+                  create: "/countries/create",
+                  edit: "/countries/edit/:id",
+                  show: "/countries/show/:id",
+                  // meta: {
+                  //   label: "ROMO Countries",
+                  // },
+                }, {
+                  name: "t_user",
+                  list: "/organization/t_user",
+                  create: "/organization/t_user/create",
+                  edit: "/organization/t_user/edit/:id",
+                  show: "/organization/t_user/show/:id",
+                  meta: {
+                    label: "用户管理",
+                    parent: "organization",
+                  },
+                }, {
+                  name: "t_dept",
+                  list: "/organization/t_dept",
+                  create: "/organization/t_dept/create",
+                  edit: "/organization/t_dept/edit/:id",
+                  show: "/organization/t_dept/show/:id",
+                  meta: {
+                    label: "部门管理",
+                    parent: "organization",
+                    idField: "dept_id",
+                  },
+                }, {
+                  name: "t_post",
+                  list: "/organization/t_post",
+                  create: "/organization/t_post/create",
+                  edit: "/organization/t_post/edit/:id",
+                  show: "/organization/t_post/show/:id",
+                  meta: {
+                    label: "职位管理",
+                    parent: "organization",
+                  },
+                }, {
+                  name: "t_role",
+                  list: "/organization/t_role",
+                  create: "/organization/t_role/create",
+                  edit: "/organization/t_role/edit/:id",
+                  show: "/organization/t_role/show/:id",
+                  meta: {
+                    label: "权限管理",
+                    parent: "organization",
+                  },
+                }]}
               >
                 <Routes>
-                  <Route index element={<WelcomePage />} />
+                  <Route
+                    element={
+                      <Authenticated
+                        key="authenticated-routes"
+                        fallback={<CatchAllNavigate to="/login" />}
+                      >
+                        <ThemedLayout Header={ThemedHeader} Sider={ThemedSider} Title={ThemedTitle}>
+                          <Outlet />
+                        </ThemedLayout>
+                      </Authenticated>
+                    }
+                  >
+                    <Route
+                      index
+                      element={<NavigateToResource resource="countries" />}
+                    />
+
+                    <Route path="/organization/t_user">
+                      <Route index element={<TUserDashboard />} />
+                      {/* <Route path="create" element={<TUserCreate />} />
+                      <Route path="edit/:id" element={<TUserEdit />} />
+                      <Route path="show/:id" element={<TUserShow />} /> */}
+                    </Route>
+                    <Route path="/organization/t_dept">
+                      <Route index element={<TDeptDashboard />} />
+                    </Route>
+                    <Route path="/organization/t_role">
+                      <Route index element={<TRoleList />} />
+                      <Route path="create" element={<TRoleCreate />} />
+                      <Route path="edit/:id" element={<TRoleEdit />} />
+                      <Route path="show/:id" element={<TRoleShow />} />
+                    </Route>
+                    <Route path="/organization/t_post">
+                      <Route index element={<TPostList />} />
+                      <Route path="create" element={<TPostCreate />} />
+                      <Route path="edit/:id" element={<TPostEdit />} />
+                      <Route path="show/:id" element={<TPostShow />} />
+                    </Route>
+
+                    <Route path="/countries">
+                      <Route index element={<CountriesList />} />
+                      <Route path="create" element={<CountriesCreate />} />
+                      <Route path="edit/:id" element={<CountriesEdit />} />
+                      <Route path="show/:id" element={<CountriesShow />} />
+                    </Route>
+                  </Route>
+
+                  <Route
+                    element={
+                      <Authenticated key="auth-pages" fallback={<Outlet />}>
+                        <Navigate to="/" />
+                      </Authenticated>
+                    }
+                  >
+                    <Route
+                      path="/login"
+                      element={
+                        <AuthPage
+                          type="login"
+                          providers={[]}
+                          rememberMe={false}
+                          formProps={{
+                            initialValues: {
+                              email: "123456@test.com",
+                              password: "123456",
+                            },
+                          }}
+                        />
+                      }
+                    />
+                    <Route path="/register" element={<AuthPage type="register" />} />
+                    <Route
+                      path="/forgot-password"
+                      element={<AuthPage type="forgotPassword" />}
+                    />
+                    <Route
+                      path="/update-password"
+                      element={<AuthPage type="updatePassword" />}
+                    />
+                  </Route>
+
+                  <Route
+                    element={
+                      <Authenticated key="catch-all">
+                        <ThemedLayout>
+                          <Outlet />
+                        </ThemedLayout>
+                      </Authenticated>
+                    }
+                  >
+                    <Route path="*" element={<ErrorComponent />} />
+                  </Route>
                 </Routes>
                 <RefineKbar />
                 <UnsavedChangesNotifier />
@@ -60,6 +236,7 @@ function App() {
               <DevtoolsPanel />
             </DevtoolsProvider>
           </AntdApp>
+        {/* </ConfigProvider> */}
         </ColorModeContextProvider>
       </RefineKbarProvider>
     </BrowserRouter>
