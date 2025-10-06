@@ -1,11 +1,11 @@
 // src/pages/organization/t_user/list.tsx
 import React, { useEffect, useState } from "react";
-import { List, useTable, useDrawerForm  } from "@refinedev/antd";
+import { List, useTable, useDrawerForm } from "@refinedev/antd";
 import { Table, Input, Select, Tag, Space, Button, message, Spin, Drawer } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { supabaseClient } from "../../../utility";
 import { PlusOutlined } from "@ant-design/icons";
-import { TUserCreate } from "./create";
+// import { TUserCreate } from "./create";
 
 type UserRow = {
   user_id: string;
@@ -29,20 +29,20 @@ export const TUserDashboard: React.FC = () => {
   });
 
   // 新建用户 Drawer
-  const {
-    formProps: createFormProps,
-    drawerProps: createDrawerProps,
-    show: showCreateDrawer,
-    saveButtonProps: createSaveButtonProps,
-  } = useDrawerForm({
-    resource: "t_user",
-    action: "create",
-    redirect: false,
-    onMutationSuccess: () => {
-      // 可选：刷新列表
-      tableQuery.refetch();
-    },
-  });
+  // const {
+  //   formProps: createFormProps,
+  //   drawerProps: createDrawerProps,
+  //   show: showCreateDrawer,
+  //   saveButtonProps: createSaveButtonProps,
+  // } = useDrawerForm({
+  //   resource: "t_user",
+  //   action: "create",
+  //   redirect: false,
+  //   onMutationSuccess: () => {
+  //     // 可选：刷新列表
+  //     tableQuery.refetch();
+  //   },
+  // });
 
   // === 本地 cache 用于部门/岗位/角色选项和用户对应关系显示 ===
   const [departments, setDepartments] = useState<OptionItem[]>([]);
@@ -475,7 +475,7 @@ export const TUserDashboard: React.FC = () => {
       },
     },
     {
-      title: "角色",
+      title: "角色权限",
       dataIndex: "role_ids",
       key: "role_ids",
       render: (_: any, record: UserRow) => {
@@ -506,15 +506,16 @@ export const TUserDashboard: React.FC = () => {
 
   return (
     <List
-      headerButtons={
-        <Button
-          type="primary"
-          icon={<PlusOutlined />}
-          onClick={() => showCreateDrawer()}
-        >
-          新建用户
-        </Button>
-      }
+      canCreate={false} // 禁用 create 功能
+    // headerButtons={
+    //   <Button
+    //     type="primary"
+    //     icon={<PlusOutlined />}
+    //     onClick={() => showCreateDrawer()}
+    //   >
+    //     新建用户
+    //   </Button>
+    // }
     >
       <Table
         {...(tableProps as any)}
@@ -522,12 +523,12 @@ export const TUserDashboard: React.FC = () => {
         columns={columns as any}
         pagination={(tableProps as any).pagination}
       />
-      <Drawer {...createDrawerProps} width={520}>
+      {/* <Drawer {...createDrawerProps} width={520}>
         <TUserCreate
           formProps={createFormProps}
           saveButtonProps={createSaveButtonProps}
         />
-      </Drawer>
+      </Drawer> */}
     </List>
   );
 };

@@ -81,6 +81,12 @@ AFTER INSERT ON auth.users
 FOR EACH ROW
 EXECUTE FUNCTION public.handle_new_user();
 
+--- 为批量注册用户的脚本开放权限（因为 t_user 关联 auth.users，而 supabase_auth_admin 只能操作 auth.users，此时激活触发器但需要访问 public.t_user）
+--- 允许 supabase_auth_admin 访问 public 的 schema
+GRANT USAGE ON SCHEMA public TO supabase_auth_admin;
+--- 允许 supabase_auth_admin 对 public.t_user 表的增删改查
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public.t_user TO supabase_auth_admin;
+
 -- =====================
 -- 部门表 t_dept
 -- =====================

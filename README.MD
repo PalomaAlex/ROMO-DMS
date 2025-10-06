@@ -1,7 +1,6 @@
 # romo-vite
 
-## volta 管理当前项目的node
-
+***使用 volta 管理当前项目的js环境***
 
 ## 添加资源 手脚架
 ```bash
@@ -19,11 +18,10 @@ npm install @refinedev/inferencer
 ```bash
 npm run refine swizzle
 ```
-可以使用任意包管理器进行这个操作
+*可以使用任意包管理器进行这个操作*
 
 
-## Available Scripts
-
+## 运行
 ### Running the development server.
 
 ```bash

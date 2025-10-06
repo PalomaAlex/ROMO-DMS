@@ -33,11 +33,10 @@ import authProvider from "./provider/authProvider";
 import { ColorModeContextProvider } from "./contexts/color-mode";
 import { ThemedLayout,ThemedHeader,ThemedSider,ThemedTitle, } from "./components/layout";
 
-import { CountriesCreate, CountriesEdit, CountriesList, CountriesShow } from "./pages/countries";
 import { TUserDashboard } from "./pages/organization/t_user";
 import { TDeptDashboard } from "./pages/organization/t_dept";
-import { TRoleCreate, TRoleEdit, TRoleList, TRoleShow } from "./pages/organization/t_role";
-import { TPostCreate, TPostEdit, TPostList, TPostShow } from "./pages/organization/t_post";
+import { TRoleDashboard } from "./pages/organization/t_role";
+import { TPostDashboard } from "./pages/organization/t_post";
 
 function App() {
   return (
@@ -84,20 +83,8 @@ function App() {
                     label: "组织管理",
                   },
                 }, {
-                  name: "countries",
-                  list: "/countries",
-                  create: "/countries/create",
-                  edit: "/countries/edit/:id",
-                  show: "/countries/show/:id",
-                  // meta: {
-                  //   label: "ROMO Countries",
-                  // },
-                }, {
                   name: "t_user",
                   list: "/organization/t_user",
-                  create: "/organization/t_user/create",
-                  edit: "/organization/t_user/edit/:id",
-                  show: "/organization/t_user/show/:id",
                   meta: {
                     label: "用户管理",
                     parent: "organization",
@@ -105,9 +92,6 @@ function App() {
                 }, {
                   name: "t_dept",
                   list: "/organization/t_dept",
-                  create: "/organization/t_dept/create",
-                  edit: "/organization/t_dept/edit/:id",
-                  show: "/organization/t_dept/show/:id",
                   meta: {
                     label: "部门管理",
                     parent: "organization",
@@ -120,7 +104,7 @@ function App() {
                   edit: "/organization/t_post/edit/:id",
                   show: "/organization/t_post/show/:id",
                   meta: {
-                    label: "职位管理",
+                    label: "岗位管理",
                     parent: "organization",
                   },
                 }, {
@@ -150,36 +134,20 @@ function App() {
                   >
                     <Route
                       index
-                      element={<NavigateToResource resource="countries" />}
+                      element={<NavigateToResource resource="t_user" />}
                     />
 
                     <Route path="/organization/t_user">
                       <Route index element={<TUserDashboard />} />
-                      {/* <Route path="create" element={<TUserCreate />} />
-                      <Route path="edit/:id" element={<TUserEdit />} />
-                      <Route path="show/:id" element={<TUserShow />} /> */}
                     </Route>
                     <Route path="/organization/t_dept">
                       <Route index element={<TDeptDashboard />} />
                     </Route>
                     <Route path="/organization/t_role">
-                      <Route index element={<TRoleList />} />
-                      <Route path="create" element={<TRoleCreate />} />
-                      <Route path="edit/:id" element={<TRoleEdit />} />
-                      <Route path="show/:id" element={<TRoleShow />} />
+                      <Route index element={<TRoleDashboard />} />
                     </Route>
                     <Route path="/organization/t_post">
-                      <Route index element={<TPostList />} />
-                      <Route path="create" element={<TPostCreate />} />
-                      <Route path="edit/:id" element={<TPostEdit />} />
-                      <Route path="show/:id" element={<TPostShow />} />
-                    </Route>
-
-                    <Route path="/countries">
-                      <Route index element={<CountriesList />} />
-                      <Route path="create" element={<CountriesCreate />} />
-                      <Route path="edit/:id" element={<CountriesEdit />} />
-                      <Route path="show/:id" element={<CountriesShow />} />
+                      <Route index element={<TPostDashboard />} />
                     </Route>
                   </Route>
 
